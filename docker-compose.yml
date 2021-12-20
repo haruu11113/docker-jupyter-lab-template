@@ -1,14 +1,18 @@
-version: '3'  
-services:  
-  jupyter:  
+version: "3"
+services:
+  py:
     build:
       context: .
-    environment:  
-      JUPYTER_ENABLE_LAB: "yes" 
-    ports:  
-      - "8888:8888"  
-    working_dir: /jupyter
-    volumes:  
-      - ../:/jupyter
-volumes:
-  jupyter-data:
+      dockerfile: ./Dockerfile
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+    ports:
+    - "8888:8888"
+    - "6006:6006"
+    volumes:
+        - ./repo:/home/ec2-user/src

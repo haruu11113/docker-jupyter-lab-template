@@ -1,15 +1,25 @@
-# jupyter lab      : 2.1.3
-FROM jupyter/scipy-notebook:54462805efcb
+# python3をベースにする
+FROM python:3.6
 
-RUN jupyter labextension install \
-  @lckr/jupyterlab_variableinspector \
-  @krassowski/jupyterlab-lsp \
-  @axlair/jupyterlab_vim
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    tree \
+    vim \
+    graphviz
 
-# pd.read_html
-RUN pip install lxml html5lib beautifulsoup4
+RUN pip install --upgrade pip
 
-# code completion
-RUN pip install jupyter-lsp python-language-server[all]
+# 作業ディレクトリを指定
+WORKDIR /home/ec2-user/repo/
 
-RUN jupyter lab build
+COPY requirements.txt /home/ec2-user/repo/
+RUN pip install -r  requirements.txt
+
+WORKDIR /home/ec2-user/repo/
+RUN jupyter serverextension enable --py jupyterlab
+
+EXPOSE 8888
+ENTRYPOINT ["jupyter-lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
+
+CMD ["--notebook-dir=/home/ec2-user/repo/"]
