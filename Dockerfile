@@ -11,9 +11,9 @@ RUN apt-get update && apt-get install -y \
 RUN pip install --upgrade pip
 
 # 作業ディレクトリを指定
-WORKDIR /home/ec2-user/repo/
+WORKDIR /home/ec2-user/
 
-COPY requirements.txt /home/ec2-user/repo/
+COPY requirements.txt /home/ec2-user/
 RUN pip install -r  requirements.txt
 
 WORKDIR /home/ec2-user/repo/
